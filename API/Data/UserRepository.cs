@@ -1,4 +1,3 @@
-using System;
 using API.DTOs;
 using API.Entities;
 using API.Helpers;
@@ -48,7 +47,8 @@ namespace API.Data
             return await PagedList<MemberDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<MemberDto>(_mapper.ConfigurationProvider), 
                 userParams.PageNumber, 
-                userParams.PageSize); 
+                userParams.PageSize);
+
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
