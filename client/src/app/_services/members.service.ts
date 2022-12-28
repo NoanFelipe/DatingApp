@@ -1,7 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
 import { PaginatedResult } from '../_models/pagination';
@@ -19,7 +18,7 @@ export class MembersService {
   user: User | undefined;
   userParams: UserParams | undefined;
 
-  constructor(private http: HttpClient, private accountService: AccountService) { 
+  constructor(private http: HttpClient, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) {
@@ -27,7 +26,7 @@ export class MembersService {
           this.user = user;
         }
       }
-    });
+    })
   }
 
   getUserParams() {
@@ -47,8 +46,7 @@ export class MembersService {
   }
 
   getMembers(userParams: UserParams) {
-    const response = this.memberCache.get((Object.values(userParams)).join('-'));
-    console.log(response);
+    const response = this.memberCache.get(Object.values(userParams).join('-'));
 
     if (response) return of(response);
 
@@ -59,21 +57,18 @@ export class MembersService {
     params = params.append('gender', userParams.gender);
     params = params.append('orderBy', userParams.orderBy);
 
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users/', params).pipe(
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params).pipe(
       map(response => {
-        this.memberCache.set((Object.values(userParams)).join('-'), response);
+        this.memberCache.set(Object.values(userParams).join('-'), response);
         return response;
       })
     )
   }
 
   getMember(username: string) {
-    console.log(this.memberCache);
     const member = [...this.memberCache.values()]
       .reduce((arr, elem) => arr.concat(elem.result), [])
       .find((member: Member) => member.userName === username);
-
-    console.log(member);
 
     if (member) return of(member);
 
@@ -90,7 +85,7 @@ export class MembersService {
   }
 
   setMainPhoto(photoId: number) {
-    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {})
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
   }
 
   deletePhoto(photoId: number) {
@@ -98,7 +93,7 @@ export class MembersService {
   }
 
   private getPaginatedResult<T>(url: string, params: HttpParams) {
-    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>;
     return this.http.get<T>(url, { observe: 'response', params }).pipe(
       map(response => {
         if (response.body) {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Pagination } from 'src/app/_models/pagination';
 import { User } from 'src/app/_models/user';
@@ -14,15 +13,15 @@ import { MembersService } from 'src/app/_services/members.service';
   styleUrls: ['./member-list.component.css']
 })
 export class MemberListComponent implements OnInit {
-  // members$: Observable<Member[]>;
+  // members$: Observable<Member[]> | undefined;
   members: Member[] = [];
   pagination: Pagination | undefined;
   userParams: UserParams | undefined;
-  genderList = [{value: 'male', display: 'Males'}, {value:'female', display: 'Females'}]
+  genderList = [{ value: 'male', display: 'Males' }, { value: 'female', display: 'Females' }]
 
   constructor(private memberService: MembersService) {
     this.userParams = this.memberService.getUserParams();
-   }
+  }
 
   ngOnInit(): void {
     // this.members$ = this.memberService.getMembers();
@@ -39,7 +38,7 @@ export class MemberListComponent implements OnInit {
             this.pagination = response.pagination;
           }
         }
-      });
+      })
     }
   }
 
@@ -55,5 +54,4 @@ export class MemberListComponent implements OnInit {
       this.loadMembers();
     }
   }
-
 }

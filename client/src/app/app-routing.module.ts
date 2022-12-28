@@ -14,8 +14,7 @@ import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.gu
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {
-    path: '',
+  {path: '', 
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
@@ -23,13 +22,13 @@ const routes: Routes = [
       {path: 'members/:username', component: MemberDetailComponent},
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChangesGuard]},
       {path: 'lists', component: ListsComponent},
-      {path: 'messages', component: MessagesComponent}
+      {path: 'messages', component: MessagesComponent},
     ]
   },
   {path: 'errors', component: TestErrorComponent},
   {path: 'not-found', component: NotFoundComponent},
   {path: 'server-error', component: ServerErrorComponent},
-  {path: '**', component: NotFoundComponent, pathMatch: 'full'}
+  {path: '**', component: NotFoundComponent, pathMatch: 'full'},
 ];
 
 @NgModule({
